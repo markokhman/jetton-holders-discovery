@@ -18,7 +18,9 @@
   },
   "scripts": {
     "dev": "ts-node ./src/scripts/singleBlockIndexerDEV.ts",
-    "realtime": "ts-node ./src/scripts/realtimeIndexer.ts",
-    "historical": "ts-node ./src/scripts/historicalReverseIndexer.ts"
+    "realtime:dev": "ts-node ./src/scripts/realtimeIndexer.ts",
+    "realtime:prod": "npx tsc && node ./build/scripts/realtimeIndexer.js",
+    "historical:dev": "ts-node ./src/scripts/historicalReverseIndexer.ts",
+    "historical:prod": "npx tsc && node ./build/scripts/historicalReverseIndexer.js"
   }
 }
