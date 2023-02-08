@@ -17,10 +17,11 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
+    "build": "npx tsc",
     "dev": "ts-node ./src/scripts/singleBlockIndexerDEV.ts",
     "realtime:dev": "ts-node ./src/scripts/realtimeIndexer.ts",
-    "realtime:prod": "npx tsc && node ./build/scripts/realtimeIndexer.js",
+    "realtime:prod": "node ./build/scripts/realtimeIndexer.js",
     "historical:dev": "ts-node ./src/scripts/historicalReverseIndexer.ts",
-    "historical:prod": "npx tsc && node ./build/scripts/historicalReverseIndexer.js"
+    "historical:prod": "node ./build/scripts/historicalReverseIndexer.js"
   }
 }
