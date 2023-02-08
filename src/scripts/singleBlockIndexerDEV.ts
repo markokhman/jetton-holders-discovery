@@ -1,26 +1,46 @@
 import { getHttpV4Endpoint } from "@orbs-network/ton-access";
-import { TonClient4 } from "ton";
-
-import mongoose from "mongoose";
-import { indexBlockJettonWallets } from "../engine/processBlock";
+import { Address, TonClient4 } from "ton";
+import { indexBlockJettonWallets } from "../engine/indexBlockJettonWallets";
 import { Jetton } from "../utils/types";
-import { sleep } from "../utils/sleep";
 import { jettons } from "../data/jettons";
+import { connectToDB } from "../engine/db";
 
-mongoose
-  .connect(
-    "mongodb+srv://admin:q1hakItPieZdESeM@cluster0.zmgm3fs.mongodb.net/?retryWrites=true&w=majority"
-  )
-  .then(() => console.log("DB Connected!"));
+require("dotenv").config();
 
 async function indexJettonInitially(jetton: Jetton | Jetton[]) {
+  await connectToDB();
+
   const endpoint = await getHttpV4Endpoint();
   const client = new TonClient4({
-    endpoint,
+    // endpoint,
+    endpoint: "https://mainnet-v4.tonhubapi.com",
   });
 
-  const myBlock = 26757740;
+  // setInterval(async () => {
+  //   const latestBlock = await client.getLastBlock();
+  //   console.log(latestBlock.last.seqno);
+  // }, 500);
+
+  const myBlock = 27185603;
   const block = await client.getBlock(myBlock);
+
+  // block.shards.map((s) => {
+  //   s.transactions.map(async (t) => {
+  //     if (t.account === "EQB0DoQp2pAhewtXz6wSU_ytPKb3vKOKrXJ1A0zBaYIwFbsU") {
+  //       let account = await client
+  //         .getAccount(myBlock, Address.parse(t.account))
+  //         .catch((error) => {
+  //           console.log(
+  //             "[parseBlock.ts] Error while getting account:" + t.account
+  //           );
+  //         });
+  //       if (account?.account.state.type === "active") {
+  //         console.log(account.account.state.code);
+  //       }
+  //     }
+  //   });
+  // });
+
   await indexBlockJettonWallets(client, block, myBlock, jetton);
 
   // if (
@@ -33,5 +53,12 @@ async function indexJettonInitially(jetton: Jetton | Jetton[]) {
   // }
 }
 
-// TODO: pass parameter from command line
-indexJettonInitially(jettons);
+const jettonSlug = process.env.npm_config_jettonSlug;
+if (jettonSlug) {
+  const jettonToIndex = jettons.find((j) => j.slug === jettonSlug);
+  if (jettonToIndex) {
+    indexJettonInitially(jettonToIndex);
+  }
+} else {
+  indexJettonInitially(jettons);
+}

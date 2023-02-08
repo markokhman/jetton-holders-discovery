@@ -971,6 +971,11 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
 
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+
 fast-xml-parser@4.0.11:
   version "4.0.11"
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.0.11.tgz#42332a9aca544520631c8919e6ea871c0185a985"
@@ -1152,10 +1157,10 @@ teslabot@^1.3.0:
   resolved "https://registry.yarnpkg.com/teslabot/-/teslabot-1.5.0.tgz#70f544516699ca5f696d8ae94f3d12cd495d5cd6"
   integrity sha512-e2MmELhCgrgZEGo7PQu/6bmYG36IDH+YrBI1iGm6jovXkeDIGa3pZ2WSqRjzkuw2vt1EqfkZoV5GpXgqL8QJVg==
 
-ton-core@^0.45.0:
-  version "0.45.0"
-  resolved "https://registry.yarnpkg.com/ton-core/-/ton-core-0.45.0.tgz#d17cbfca28798fe9ba69502cb42950545da2420b"
-  integrity sha512-OWaLtPE4fWSQceZk8IdSwr/V20x/8FlT8UOJrdf0WJM7jgGnoLvcrPHezirrNAbcg//Ig5dwGUO0SLAcpzpTaw==
+ton-core@^0.46.0:
+  version "0.46.0"
+  resolved "https://registry.yarnpkg.com/ton-core/-/ton-core-0.46.0.tgz#4138606fccf7fa45dc5c6cd6dcf1d1f17b2d4215"
+  integrity sha512-QUOlL98652rsOPTIvB01+MsAgLI1ehvpsngYzNWr7pxHOk4xk64Adq0StTmqGEchkzjhNowIo3gzwGGPrxo3zw==
   dependencies:
     symbol.inspect "1.0.1"
 

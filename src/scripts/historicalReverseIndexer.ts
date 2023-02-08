@@ -4,11 +4,11 @@ import { jettons } from "../data/jettons";
 import { connectToDB } from "../engine/db";
 import { indexBlockJettonWallets } from "../engine/indexBlockJettonWallets";
 import { sleep } from "../utils/sleep";
-import { Block } from "../utils/types";
+import { Block, Jetton } from "../utils/types";
 
 require("dotenv").config();
 
-async function startRealTimeIndexer() {
+async function startHistoricalReverseIndexer(jetton: Jetton | Jetton[]) {
   await connectToDB();
 
   const endpoint = await getHttpV4Endpoint();
@@ -17,12 +17,13 @@ async function startRealTimeIndexer() {
   });
   const latestBlock = await client.getLastBlock();
 
-  await realTimeIndexBlock(client, latestBlock.last.seqno);
+  await reverseIndexBlock(client, latestBlock.last.seqno, jetton);
 }
 
-async function realTimeIndexBlock(
+async function reverseIndexBlock(
   client: TonClient4,
-  latestBlockSeqno: number
+  latestBlockSeqno: number,
+  jetton: Jetton | Jetton[]
 ) {
   const block = await client.getBlock(latestBlockSeqno).catch(async (e) => {
     console.log(
@@ -32,7 +33,7 @@ async function realTimeIndexBlock(
     );
 
     await sleep(2000);
-    await realTimeIndexBlock(client, latestBlockSeqno);
+    await reverseIndexBlock(client, latestBlockSeqno, jetton);
   });
 
   console.log(
@@ -43,20 +44,26 @@ async function realTimeIndexBlock(
     client,
     block as Block,
     latestBlockSeqno,
-    jettons
+    jetton
   );
 
-  await realTimeIndexBlock(client, latestBlockSeqno + 1);
+  await reverseIndexBlock(client, latestBlockSeqno - 1, jetton);
 }
 
-// Notes:
-// 1. Realtime indexer run on all jettons, so we dont need to specify jetton
-// 2. After adding new jetton we have to restart realtime indexer and run historical indexer for this jetton
-
-console.log(
-  `[realTimeIndexer.ts] Started realtime indexer for ${jettons
-    .map((j) => j.slug)
-    .join(", ")}`
-);
-
-startRealTimeIndexer();
+const jettonSlug = process.env.npm_config_jettonSlug;
+if (jettonSlug) {
+  const jettonToIndex = jettons.find((j) => j.slug === jettonSlug);
+  if (jettonToIndex) {
+    console.log(
+      `[realTimeIndexer.ts] Started historical reverse indexer for ${jettonToIndex.slug}`
+    );
+    startHistoricalReverseIndexer(jettonToIndex);
+  }
+} else {
+  console.log(
+    `[realTimeIndexer.ts] Started historical reverse indexer for ${jettons
+      .map((j) => j.slug)
+      .join(", ")}`
+  );
+  startHistoricalReverseIndexer(jettons);
+}
