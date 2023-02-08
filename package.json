@@ -20,7 +20,7 @@
     "build": "npx tsc",
     "dev": "ts-node ./src/scripts/singleBlockIndexerDEV.ts",
     "realtime:dev": "ts-node ./src/scripts/realtimeIndexer.ts",
-    "realtime:prod": "node ./build/scripts/realtimeIndexer.js",
+    "realtime:prod": "node ./build/scripts/realTimeIndexer.js",
     "historical:dev": "ts-node ./src/scripts/historicalReverseIndexer.ts",
     "historical:prod": "node ./build/scripts/historicalReverseIndexer.js"
   }
